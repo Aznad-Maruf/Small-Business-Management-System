@@ -93,7 +93,6 @@
             this.invoiceNoTextBox.Name = "invoiceNoTextBox";
             this.invoiceNoTextBox.Size = new System.Drawing.Size(264, 29);
             this.invoiceNoTextBox.TabIndex = 1;
-            this.invoiceNoTextBox.TextChanged += new System.EventHandler(this.invoiceNoTextBox_TextChanged);
             // 
             // DateDateTimePicker
             // 
@@ -216,7 +215,6 @@
             this.addButton.TabIndex = 22;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = true;
-            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // remarksRichTextBox
             // 
@@ -412,7 +410,6 @@
             this.productComboBox.Name = "productComboBox";
             this.productComboBox.Size = new System.Drawing.Size(264, 32);
             this.productComboBox.TabIndex = 0;
-            this.productComboBox.SelectedIndexChanged += new System.EventHandler(this.ProductComboBox_SelectedValueChanged);
             // 
             // categoryComboBox
             // 
@@ -422,7 +419,6 @@
             this.categoryComboBox.Name = "categoryComboBox";
             this.categoryComboBox.Size = new System.Drawing.Size(264, 32);
             this.categoryComboBox.TabIndex = 0;
-            this.categoryComboBox.SelectedIndexChanged += new System.EventHandler(this.CategoryComboBox_SelectedValueChanged);
             // 
             // purchaseDataGridView
             // 
@@ -441,7 +437,6 @@
             this.submitButton.TabIndex = 22;
             this.submitButton.Text = "Submit";
             this.submitButton.UseVisualStyleBackColor = true;
-            this.submitButton.Click += new System.EventHandler(this.SubmitButton_Click);
             // 
             // PurchaseUI
             // 
@@ -454,7 +449,6 @@
             this.Controls.Add(this.supplierGroupBox);
             this.Name = "PurchaseUI";
             this.Text = "Purchase";
-            this.Load += new System.EventHandler(this.Purchase_Load);
             this.supplierGroupBox.ResumeLayout(false);
             this.supplierGroupBox.PerformLayout();
             this.productGroupBox.ResumeLayout(false);

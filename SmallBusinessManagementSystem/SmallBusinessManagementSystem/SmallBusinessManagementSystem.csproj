@@ -46,7 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manager\PurchaseManager.cs" />
     <Compile Include="Manager\SalesManager.cs" />
     <Compile Include="Model\ProductDetails.cs" />
     <Compile Include="Model\PurchaseDetails.cs" />
@@ -55,7 +54,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ConnectionRepository.cs" />
-    <Compile Include="Repository\PurchaseRepository.cs" />
     <Compile Include="Repository\SalesRepository.cs" />
     <Compile Include="UI\PurchaseUI.cs">
       <SubType>Form</SubType>
