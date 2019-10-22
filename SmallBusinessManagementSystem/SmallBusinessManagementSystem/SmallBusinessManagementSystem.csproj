@@ -55,12 +55,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ConnectionRepository.cs" />
     <Compile Include="Repository\SalesRepository.cs" />
-    <Compile Include="UI\PurchaseUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\PurchaseUI.Designer.cs">
-      <DependentUpon>PurchaseUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\SalesUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,9 +70,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\PurchaseUI.resx">
-      <DependentUpon>PurchaseUI.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\SalesUI.resx">
       <DependentUpon>SalesUI.cs</DependentUpon>
     </EmbeddedResource>
