@@ -35,7 +35,7 @@ namespace SmallBusinessManagementSystem.UI
         }
 
 
-        ------------ Copyy ---------------
+        //------------ Copyy ---------------
         
         List<PurchaseDetails> pdList = new List<PurchaseDetails>();
         private double _loyaltyPoint;
@@ -296,4 +296,6 @@ namespace SmallBusinessManagementSystem.UI
         }
 
     }
-}
+    }
+
+

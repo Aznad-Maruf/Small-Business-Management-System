@@ -48,15 +48,18 @@
   <ItemGroup>
     <Compile Include="Manager\PurchaseManager.cs" />
     <Compile Include="Manager\SalesManager.cs" />
+    <Compile Include="Manager\SupplierEntryManager.cs" />
     <Compile Include="Model\ProductDetails.cs" />
     <Compile Include="Model\PurchaseDetails.cs" />
     <Compile Include="Model\PurchaseModel.cs" />
     <Compile Include="Model\SalesModel.cs" />
+    <Compile Include="Model\SupplierEntry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ConnectionRepository.cs" />
     <Compile Include="Repository\PurchaseRepository.cs" />
     <Compile Include="Repository\SalesRepository.cs" />
+    <Compile Include="Repository\SupplierEntryRepository.cs" />
     <Compile Include="UI\PurchaseUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +71,12 @@
     </Compile>
     <Compile Include="UI\SalesUI.Designer.cs">
       <DependentUpon>SalesUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SupplierEntryUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SupplierEntryUI.Designer.cs">
+      <DependentUpon>SupplierEntryUI.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -83,6 +92,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\SalesUI.resx">
       <DependentUpon>SalesUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SupplierEntryUI.resx">
+      <DependentUpon>SupplierEntryUI.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\DataSources\SmallBusinessManagementSystem.Model.ProductDetails.datasource" />
     <None Include="Properties\Settings.settings">
