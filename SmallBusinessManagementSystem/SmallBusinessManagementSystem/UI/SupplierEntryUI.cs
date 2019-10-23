@@ -136,6 +136,15 @@ namespace SmallBusinessManagementSystem.UI
 
                     }
                     suppliersDataGridView.DataSource = _supplierEntryManager.ShowSuppliers();
+
+                    supplierCodeTextBox.Clear();
+                    supplierNameTextBox.Clear();
+                    supplierAddressTextBox.Clear();
+                    supplierEmailTextBox.Clear();
+                    supplierContactTextBox.Clear();
+                    supplierContactPersonTextBox.Clear();
+
+                    saveButton.Text = "Save";
                 }
             }
         }
@@ -143,28 +152,28 @@ namespace SmallBusinessManagementSystem.UI
         private void SupplierEntryUI_Load(object sender, EventArgs e)
         {
             suppliersDataGridView.DataSource = _supplierEntryManager.ShowSuppliers();
+           // _supplierEntry.Count = supplierEntryBindingSource.Count;
+        }
+
+             
+
+        private void suppliersDataGridView_MouseClick(object sender, MouseEventArgs e)
+        {
+                supplierCodeTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[1].Value.ToString();
+                supplierNameTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[2].Value.ToString();
+                supplierAddressTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[3].Value.ToString();
+                supplierEmailTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[4].Value.ToString();
+                supplierContactTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[5].Value.ToString();
+                supplierContactPersonTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[6].Value.ToString();
+
+                saveButton.Text = "Update";
+            
+
         }
 
         private void suppliersDataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             suppliersDataGridView.Rows[e.RowIndex].Cells[0].Value = (e.RowIndex + 1).ToString();
-        }
-
-        private void suppliersDataGridView_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            supplierCodeTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[1].Value.ToString();
-            supplierNameTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[2].Value.ToString();
-            supplierAddressTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[3].Value.ToString();
-            supplierEmailTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[4].Value.ToString();
-            supplierContactTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[5].Value.ToString();
-            supplierContactPersonTextBox.Text = suppliersDataGridView.SelectedRows[0].Cells[6].Value.ToString();
-
-            saveButton.Text = "Update";
-        }
-
-        private void suppliersDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

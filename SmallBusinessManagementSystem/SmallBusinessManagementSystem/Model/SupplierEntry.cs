@@ -14,5 +14,6 @@ namespace SmallBusinessManagementSystem.Model
         public string Email { set; get; }
         public string Contact { set; get; }
         public string ContactPerson { set; get; }
+       // public int Count { set; get; }
     }
 }

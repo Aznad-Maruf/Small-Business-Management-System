@@ -46,26 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manager\PurchaseManager.cs" />
     <Compile Include="Manager\SalesManager.cs" />
     <Compile Include="Manager\SupplierEntryManager.cs" />
     <Compile Include="Model\ProductDetails.cs" />
-    <Compile Include="Model\PurchaseDetails.cs" />
-    <Compile Include="Model\PurchaseModel.cs" />
     <Compile Include="Model\SalesModel.cs" />
     <Compile Include="Model\SupplierEntry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ConnectionRepository.cs" />
-    <Compile Include="Repository\PurchaseRepository.cs" />
     <Compile Include="Repository\SalesRepository.cs" />
     <Compile Include="Repository\SupplierEntryRepository.cs" />
-    <Compile Include="UI\PurchaseUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\PurchaseUI.Designer.cs">
-      <DependentUpon>PurchaseUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\SalesUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,9 +77,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\PurchaseUI.resx">
-      <DependentUpon>PurchaseUI.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\SalesUI.resx">
       <DependentUpon>SalesUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -97,6 +84,8 @@
       <DependentUpon>SupplierEntryUI.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\DataSources\SmallBusinessManagementSystem.Model.ProductDetails.datasource" />
+    <None Include="Properties\DataSources\SmallBusinessManagementSystem.Model.SalesModel.datasource" />
+    <None Include="Properties\DataSources\SmallBusinessManagementSystem.Model.SupplierEntry.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
