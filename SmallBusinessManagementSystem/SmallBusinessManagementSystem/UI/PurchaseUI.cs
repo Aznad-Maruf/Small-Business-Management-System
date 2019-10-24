@@ -25,82 +25,80 @@ namespace SmallBusinessManagementSystem.UI
 
         private void Purchase_Load(object sender, EventArgs e)
         {
-            supplierComboBox.DataSource = _purchaseManager.GetListForComboBox("Supplier");
-            categoryComboBox.DataSource = _purchaseManager.GetListForComboBox("Category");
+            supplierComboBox.DataSource = _purchaseManager.GetSupplierList();
+            categoryComboBox.DataSource = _purchaseManager.GetCategoryList();
+
+            
+            supplierComboBox.ValueMember = "Code";
+            supplierComboBox.DisplayMember = "Name";
+            categoryComboBox.ValueMember = "Code";
+            categoryComboBox.DisplayMember = "Name";
+
+            supplierComboBox.SelectedIndex = -1;
+            categoryComboBox.SelectedIndex = -1;
+
         }
 
-        private void addButton_Click(object sender, EventArgs e)
-        {
 
-        }
-
-
-        ------------ Copyy ---------------
-        
-        List<PurchaseDetails> pdList = new List<PurchaseDetails>();
-        private double _loyaltyPoint;
+        /*------------ Copyy ---------------*/
 
         private void AddButton_Click(object sender, EventArgs e)
         {
             if(!GetAllData()) return;
 
-            //MessageBox.Show($"{_purchaseModel.Category}{Environment.NewLine}{_purchaseModel.Product}");
+            //MessageBox.Show(_purchaseModel.ManufactureDate);
 
-            string message = _purchaseManager.CanBeAdded(_purchaseModel);
-            if (message.Equals("True"))
-            {
-
-
-                _purchaseManager.AddToCart(GetPurchaseDetails());
+            //string message = _purchaseManager.CanBeAdded(_purchaseModel);
+            //if (message.Equals("True"))
+            //{
 
 
-                //_purchaseManager.AddToPurchase(_purchaseModel);
-                //MessageBox.Show(_purchaseManager.purchaseDetailsList.Count.ToString());
+            _purchaseManager.AddToCart(GetPurchaseModel());
 
 
-                purchaseDataGridView.DataSource = null;
-                purchaseDataGridView.DataSource = _purchaseManager.purchaseDetailsList;
+            //_purchaseManager.AddToPurchase(_purchaseModel);
+            //    //MessageBox.Show(_purchaseManager.purchaseModelList.Count.ToString());
 
-                FillTotalAndAll();
 
-                ClearUI("product");
+            purchaseDataGridView.DataSource = null;
+            purchaseDataGridView.DataSource = _purchaseManager.PurchaseModelList;
 
-            }
-            else
-            {
-                MessageBox.Show(message);
-            }
+            //    FillTotalAndAll();
+
+                ClearUi("product");
         }
 
         private void SubmitButton_Click(object sender, EventArgs e)
         {
-            if (_purchaseManager.purchaseDetailsList.Count == 0)
+            if (_purchaseManager.PurchaseModelList.Count == 0)
             {
                 MessageBox.Show("Add Item First");
                 return;
             }
             _purchaseManager.AddListToPurchase();
-            _purchaseManager.SetLoyaltyPoint(customerComboBox.Text, _loyaltyPoint);
-
-            ClearUI("all");
+            purchaseDataGridView.DataSource = null;
+            purchaseDataGridView.DataSource = _purchaseManager.PurchaseModelList;
+            ClearUi("all");
         }
 
         // --------- Methods --------
 
-        private void FillTotalAndAll()
+        private void PopulateComboBox(ComboBox comboBox, string name)
         {
-            _loyaltyPoint = _purchaseManager.GetNewLoyaltyPoint(customerComboBox.Text, loyaltyPointTextBox.Text);
-            //MessageBox.Show(_loyaltyPoint.ToString());
-            grandTotalTextBox.Text = _purchaseManager.GetInfo("grandTotal", _loyaltyPoint);
-            discountTextBox.Text = _purchaseManager.GetInfo("discountPercentage", _loyaltyPoint);
-            discountAmountTextBox.Text = _purchaseManager.GetInfo("discountAmount", _loyaltyPoint);
-            payableAmountTextBox.Text = _purchaseManager.GetInfo("payableAmount", _loyaltyPoint);
+                comboBox.DataSource = _purchaseManager.GetListForComboBox(name);
+                comboBox.ValueMember = "Code";
+                comboBox.DisplayMember = "Name";
         }
 
-        private void ClearUI(string howMuch)
+        private void ClearUi(string howMuch)
         {
-            if(!howMuch.Equals("Category")||!howMuch.Equals("product"))categoryComboBox.SelectedIndex = -1;
-            if (!howMuch.Equals("product")) productComboBox.SelectedIndex = -1;
+            if(!howMuch.Equals("Category")&&!howMuch.Equals("Product"))categoryComboBox.SelectedIndex = -1;
+            if (!howMuch.Equals("Product")) productComboBox.SelectedIndex = -1;
+            if (howMuch.Equals("all"))
+            {
+                invoiceNoTextBox.Text = null;
+                supplierComboBox.SelectedIndex = -1;
+            }
             codeTextBox.Text = null;
             availableQuantityTextBox.Text = null;
             quantityTextBox.Text = null;
@@ -115,10 +113,47 @@ namespace SmallBusinessManagementSystem.UI
         private bool GetAllData()
         {
             _purchaseModel.InvoiceNo = invoiceNoTextBox.Text;
+            if (String.IsNullOrEmpty(invoiceNoTextBox.Text))
+            {
+                MessageBox.Show("InvoiceNo can't be Empty");
+                return false;
+            }
+
+            if (!_purchaseManager.IsUniqueInvoiceNo(_purchaseModel.InvoiceNo))
+            {
+                MessageBox.Show("InvoiceNo is Used Before");
+                return false;
+            }
             _purchaseModel.Date = DateDateTimePicker.Text;
-            _purchaseModel.Supplier = supplierComboBox.Text;
-            _purchaseModel.Category = categoryComboBox.Text;
-            _purchaseModel.Product = productComboBox.Text;
+            try
+            {
+                _purchaseModel.Supplier = ((SupplierModel)supplierComboBox.SelectedItem).Code;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Select a Supplier");
+                return false;
+            }
+
+            try
+            {
+                _purchaseModel.Category = ((CategoryModel)categoryComboBox.SelectedItem).Code;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Select Category");
+                return false;
+            }
+
+            try
+            {
+                _purchaseModel.Product = ((ProductModel)productComboBox.SelectedItem).Code;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Select Product");
+                return false;
+            }
             _purchaseModel.ManufactureDate = manufactureDateDateTimePicker.Text;
             _purchaseModel.ExpireDate = exipreDateDateTimePicker.Text;
             try
@@ -165,95 +200,135 @@ namespace SmallBusinessManagementSystem.UI
                 return false;
             }
 
+            _purchaseModel.ManufactureDate = manufactureDateDateTimePicker.Text;
+            _purchaseModel.ExpireDate = exipreDateDateTimePicker.Text;
+            _purchaseModel.Remarks = remarksRichTextBox.Text;
+
             return true;
         }
 
-        private PurchaseDetails GetPurchaseDetails()
+        private PurchaseModel GetPurchaseModel()
         {
-            PurchaseDetails purchaseDetails = new PurchaseDetails();
+            PurchaseModel purchaseModel = new PurchaseModel();
 
-            purchaseDetails.ManufacturedDate = _purchaseModel.ManufactureDate;
-            purchaseDetails.ExpiredDate = _purchaseModel.ExpireDate;
-            purchaseDetails.MRP = _purchaseModel.MRP;
-            purchaseDetails.Product = _purchaseModel.Product;
-            purchaseDetails.Quantity = _purchaseModel.Quantity;
-            purchaseDetails.UnitPrice = _purchaseModel.UnitPrice;
-            purchaseDetails.TotalPrice = _purchaseModel.Quantity * _purchaseModel.UnitPrice;
-            purchaseDetails.Remarks = _purchaseModel.Remarks;
+            purchaseModel.ManufactureDate = _purchaseModel.ManufactureDate;
+            purchaseModel.ExpireDate = _purchaseModel.ExpireDate;
+            purchaseModel.MRP = _purchaseModel.MRP;
+            purchaseModel.Product = _purchaseModel.Product;
+            purchaseModel.Quantity = _purchaseModel.Quantity;
+            purchaseModel.UnitPrice = _purchaseModel.UnitPrice;
+            purchaseModel.TotalPrice = _purchaseModel.Quantity * _purchaseModel.UnitPrice;
+            purchaseModel.Remarks = _purchaseModel.Remarks;
 
-            purchaseDetails.InvoiceNo = _purchaseModel.InvoiceNo;
-            purchaseDetails.Category = _purchaseModel.Category;
-            purchaseDetails.Supplier = _purchaseModel.Supplier;
-            purchaseDetails.Date = _purchaseModel.Date;
-
-            return purchaseDetails;
+            purchaseModel.InvoiceNo = _purchaseModel.InvoiceNo;
+            purchaseModel.Category = _purchaseModel.Category;
+            purchaseModel.Supplier = _purchaseModel.Supplier;
+            purchaseModel.Date = _purchaseModel.Date;
+            //MessageBox.Show(purchaseModel.ManufactureDate);
+            return purchaseModel;
         }
 
         private void FillAvailableQuantity()
         {
-            if (String.IsNullOrEmpty(productComboBox.Text) || String.IsNullOrEmpty(mrpTextBox.Text))
-                totalMrpTextBox.Text = null;
-            else
+            //if (String.IsNullOrEmpty(productComboBox.Text) || String.IsNullOrEmpty(mrpTextBox.Text))
+            //    totalMrpTextBox.Text = null;
+            //else
+            //{
+            //    totalMrpTextBox.Text =
+            //        Convert.ToDouble(Convert.ToDouble(quantityComboBox.Text) * Convert.ToDouble(mrpTextBox.Text)).ToString();
+            //}
+        }
+
+        private void QuantityTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(quantityTextBox.Text))
             {
-                totalMrpTextBox.Text =
-                    Convert.ToDouble(Convert.ToDouble(quantityComboBox.Text) * Convert.ToDouble(mrpTextBox.Text)).ToString();
+                totalPriceTextBox.Text = null;
+                return;
             }
-        }
-
-        private void FillTheComboBoxes()
-        {
-            //productComboBox.SelectedIndex = -1;
-            customerComboBox.DataSource = _purchaseManager.GetListForComboBox("Customer");
-            categoryComboBox.DataSource = _purchaseManager.GetListForComboBox("Category");
-            customerComboBox.SelectedIndex = -1;
-            categoryComboBox.SelectedIndex = -1;
-
-
-            customerComboBox.SelectedText = "-Select-";
-            categoryComboBox.SelectedText = "-Select-";
-            //productComboBox.SelectedText = "-Select";
-
-        }
-
-        private void invoiceNoTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-            }
-
-        private void ProductComboBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            //MessageBox.Show(productComboBox.SelectedIndex.ToString());
-            if (productComboBox.SelectedIndex == -1) return;
-            if (_isProductSelected)
+            try
             {
-                codeTextBox.Text = _purchaseManager.GetProductCode()
-
-                ClearUI("Product");
+                _purchaseModel.Quantity = Convert.ToDouble(quantityTextBox.Text);
+                if (!String.IsNullOrEmpty(unitPriceTextBox.Text))
+                {
+                    totalPriceTextBox.Text = (_purchaseModel.Quantity * _purchaseModel.UnitPrice).ToString();
+                }
+            }
+            catch (Exception ee)
+            {
+                quantityTextBox.Text = null;
+                totalPriceTextBox.Text = null;
+                MessageBox.Show("Must enter a valid Quantity");
             }
 
-            _isProductSelected = true;
+        }
+
+        private void UnitPriceTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(unitPriceTextBox.Text))
+            {
+                totalPriceTextBox.Text = null;
+                return;
+            }
+            try
+            {
+                _purchaseModel.UnitPrice = Convert.ToDouble(unitPriceTextBox.Text);
+                if (!String.IsNullOrEmpty(quantityTextBox.Text))
+                {
+                    totalPriceTextBox.Text = (_purchaseModel.Quantity * _purchaseModel.UnitPrice).ToString();
+                }
+            }
+            catch (Exception ee)
+            {
+                unitPriceTextBox.Text = null;
+                totalPriceTextBox.Text = null;
+                MessageBox.Show("Must enter a valid UnitPrice");
+            }
+        }
+
+        private void gotoSalesLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            this.Hide();
+            SalesUI salesUi = new SalesUI();
+            salesUi.Closed += (s, args) => this.Close();
+            salesUi.Show();
+            //this.Close();
         }
 
         private void purchaseDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             string si, column;
-            DataGridViewRow row = purchaseDataGridView.Rows[e.RowIndex];
-
+            //DataGridViewRow row = purchaseDataGridView.Rows[e.RowIndex];
+            //MessageBox.Show(si);
             try
             {
                 column = purchaseDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
                 si = purchaseDataGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
             }
-            catch (Exception exception)
+
+            catch (Exception ee)
             {
                 return;
             }
             if (column.Equals("Edit"))
             {
+                PurchaseModel purchaseModel = _purchaseManager.GetPurchaseModel(si);
+                DateDateTimePicker.Text = purchaseModel.Date;
+                invoiceNoTextBox.Text = purchaseModel.InvoiceNo;
+                supplierComboBox.SelectedValue = purchaseModel.Supplier;
+                categoryComboBox.SelectedValue = purchaseModel.Category;
+                productComboBox.SelectedValue = purchaseModel.Product;
+                //codeTextBox.Text = purchaseModel.Product;
+                //availableQuantityTextBox.Text = purchaseModel.AvailableQuantity;
+                manufactureDateDateTimePicker.Text = purchaseModel.ManufactureDate;
+                exipreDateDateTimePicker.Text = purchaseModel.ExpireDate;
+                quantityTextBox.Text = purchaseModel.Quantity.ToString();
+                unitPriceTextBox.Text = purchaseModel.UnitPrice.ToString();
+                //totalPriceTextBox.Text = (purchaseModel.Quantity * purchaseModel.UnitPrice).ToString();
+                //previousUnitPriceTextBox.Text = purchaseModel.PreviousUnitPrice.ToString();
+                //previousMrpTextBox.Text = purchaseModel.PreviousMRP.ToString();
+                mrpTextBox.Text = purchaseModel.MRP.ToString();
+                _purchaseManager.DeleteFromCart(si);
 
             }
 
@@ -264,35 +339,57 @@ namespace SmallBusinessManagementSystem.UI
             }
 
 
-            if (_purchaseManager.purchaseDetailsList.Count == 0) ClearUI("purchaseDetails");
-            else
-            {
-                purchaseDataGridView.DataSource = null;
-                purchaseDataGridView.DataSource = _purchaseManager.purchaseDetailsList;
-                FillTotalAndAll();
-            }
+            //if (_purchaseManager.PurchaseModelList.Count == 0) ClearUi("purchasedetails");
+            purchaseDataGridView.DataSource = null;
+            purchaseDataGridView.DataSource = _purchaseManager.PurchaseModelList;
+        }
 
+        private void ProductComboBox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            //MessageBox.Show(productComboBox.SelectedIndex.ToString());
+            if (productComboBox.SelectedIndex != 0) _isProductSelected = true;
+            if (productComboBox.SelectedIndex == -1) return;
+            if (_isProductSelected)
+            {
+                //MessageBox.Show(productComboBox.SelectedIndex.ToString());
+
+                //_purchaseModel.Supplier = ((SupplierModel)supplierComboBox.SelectedItem).Code;
+                _purchaseModel.Category = ((CategoryModel)categoryComboBox.SelectedItem).Code;
+                _purchaseModel.Product = ((ProductModel)productComboBox.SelectedItem).Code;
+                _purchaseModel.Code = _purchaseModel.Product;
+
+                //MessageBox.Show("IN");
+                _purchaseManager.FillUpPurchaseInfo(_purchaseModel);
+                codeTextBox.Text = _purchaseModel.Code;
+                availableQuantityTextBox.Text = _purchaseManager.GetAvailableQuantity(_purchaseModel).ToString();
+                previousUnitPriceTextBox.Text = _purchaseModel.PreviousUnitPrice;
+                previousMrpTextBox.Text = _purchaseModel.PreviousMRP;
+
+
+                //ClearUi("Product");
+            }
 
         }
 
         private void CategoryComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
-            //categoryComboBox.SelectedIndex = 0;
-            //categoryComboBox.SelectedText = null;
+            if (categoryComboBox.SelectedIndex != 0) _isCategorySelected = true;
 
             //MessageBox.Show(categoryComboBox.SelectedIndex.ToString());
             if (categoryComboBox.SelectedIndex == -1) return;
             if (_isCategorySelected)
             {
                 //MessageBox.Show(categoryComboBox.Text);
-                productComboBox.DataSource = _purchaseManager.GetListForComboBox("Product", categoryComboBox.Text);
-                productComboBox.SelectedIndex = -1;
-                productComboBox.SelectedText = "-Select-";
+                productComboBox.DataSource =
+                    _purchaseManager.GetProductList(((CategoryModel)categoryComboBox.SelectedItem).Code.ToString());
+                productComboBox.ValueMember = "Code";
+                productComboBox.DisplayMember = "Name";
+                _isProductSelected = false;
+                //productComboBox.SelectedIndex = -1;
+                //productComboBox.SelectedText = "-Select-";
 
-                ClearUI("Category");
+                ClearUi("Category");
             }
-
-            _isCategorySelected = true;
         }
 
     }

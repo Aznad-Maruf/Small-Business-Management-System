@@ -119,12 +119,13 @@ namespace SmallBusinessManagementSystem.UI
         private void GetAllData()
         {
             //SalesModel _salesModel = new SalesModel();
-            _salesModel.Category = categoryComboBox.Text;
-            _salesModel.Customer = customerComboBox.Text;
+            _salesModel.Category = ((CategoryModel)categoryComboBox.SelectedItem).Code;
+            _salesModel.Customer = ((CustomerModel)customerComboBox.SelectedItem).Code;
             _salesModel.Date = dateDateTimePicker.Text;
-            _salesModel.Product = productComboBox.Text;
+            _salesModel.Product = ((ProductModel)productComboBox.SelectedItem).Code;
             try
             {
+                _salesModel.MRP = Convert.ToDouble(mrpTextBox.Text);
                 _salesModel.Quantity = Convert.ToDouble(quantityComboBox.Text);
             }
             catch (Exception e)
@@ -143,10 +144,10 @@ namespace SmallBusinessManagementSystem.UI
             productDetails.TotalMrp = Convert.ToDouble(totalMrpTextBox.Text);
             SalesModel salesModel = new SalesModel();
 
-            salesModel.Category = categoryComboBox.Text;
-            salesModel.Customer = customerComboBox.Text;
-            salesModel.Date = dateDateTimePicker.Text;
-            salesModel.Product = productComboBox.Text;
+            salesModel.Category = _salesModel.Category;
+            salesModel.Customer = _salesModel.Customer;
+            salesModel.Date = _salesModel.Date;
+            salesModel.Product = _salesModel.Product;
             try
             {
                 salesModel.Quantity = Convert.ToDouble(quantityComboBox.Text);
@@ -173,43 +174,51 @@ namespace SmallBusinessManagementSystem.UI
 
         private void FillTheComboBoxes()
         {
-            //productComboBox.SelectedIndex = -1;
-            customerComboBox.DataSource = _salesManager.GetListForComboBox("Customer");
-            categoryComboBox.DataSource = _salesManager.GetListForComboBox("Category");
+            customerComboBox.DataSource = _salesManager.GetCustomerList();
+            categoryComboBox.DataSource = _salesManager.GetCategoryList();
+
+
+            customerComboBox.ValueMember = "Code";
+            customerComboBox.DisplayMember = "Code";
+            categoryComboBox.ValueMember = "Code";
+            categoryComboBox.DisplayMember = "Name";
+
             customerComboBox.SelectedIndex = -1;
             categoryComboBox.SelectedIndex = -1;
-            
-
-            customerComboBox.SelectedText = "-Select-";
-            categoryComboBox.SelectedText = "-Select-";
-            //productComboBox.SelectedText = "-Select";
 
         }
 
         private void ProductComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
             //MessageBox.Show(productComboBox.SelectedIndex.ToString());
+            if (productComboBox.SelectedIndex != 0) _isProductSelected = true;
             if (productComboBox.SelectedIndex == -1) return;
             if (_isProductSelected)
             {
                 //MessageBox.Show("Inside");
-                double availableQuantity = _salesManager.GetAvailableQuantity(categoryComboBox.Text, productComboBox.Text);
+                _salesModel.Category = ((CategoryModel)categoryComboBox.SelectedItem).Code;
+                _salesModel.Customer = ((CustomerModel)customerComboBox.SelectedItem).Code;
+                _salesModel.Product = ((ProductModel)productComboBox.SelectedItem).Code;
+
+                double availableQuantity = _salesManager.GetAvailableQuantity(_salesModel.Category, _salesModel.Product);
 
 
                 List<int> list = new List<int>();
                 for (int a_i = 1; a_i <= availableQuantity; a_i++) list.Add(a_i);
                 quantityComboBox.DataSource = list;
                 availableQuantityTextBox.Text = availableQuantity.ToString();
-                mrpTextBox.Text = _salesManager.GetMrp(categoryComboBox.Text, productComboBox.Text);
+                mrpTextBox.Text = _salesManager.GetMrp(_salesModel.Category, _salesModel.Product);
                 FillTotalMrp();
                 if (availableQuantity == 0)
                 {
                     //MessageBox.Show("In");
                     mrpTextBox.Text = null;
                 }
+
+                _isQuantitySelected = false;
             }
 
-            _isProductSelected = true;
+            //_isProductSelected = true;
         }
 
         private void salesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -229,6 +238,7 @@ namespace SmallBusinessManagementSystem.UI
             if (column.Equals("Edit"))
             {
 
+                _salesManager.DeleteFromCart(si);
             }
 
             if (column.Equals("Delete"))
@@ -249,26 +259,37 @@ namespace SmallBusinessManagementSystem.UI
 
         }
 
+        private void gotoPurchaseLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            this.Hide();
+            PurchaseUI purchaseUi = new PurchaseUI();
+            purchaseUi.Closed += (s, args) => this.Close();
+            purchaseUi.Show();
+            //this.Close();
+        }
+
         private void quantityComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
+            if (quantityComboBox.SelectedIndex != 0) _isQuantitySelected = true;
             if (quantityComboBox.SelectedIndex == -1) return;
             if (_isQuantitySelected)
             {
                 FillTotalMrp();
             }
 
-            _isQuantitySelected = true;
+            //_isQuantitySelected = true;
         }
 
         private void CustomerComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
+            if (customerComboBox.SelectedIndex != 0) _isCustomerSelected = true;
             if (customerComboBox.SelectedIndex == -1) return;
             if (_isCustomerSelected)
             {
-                loyaltyPointTextBox.Text = _salesManager.GetLoyaltyPoint(customerComboBox.Text);
+                loyaltyPointTextBox.Text = _salesManager.GetLoyaltyPoint(((CustomerModel)customerComboBox.SelectedItem).Code);
             }
 
-            _isCustomerSelected = true;
+            //_isCustomerSelected = true;
         }
 
         private void CategoryComboBox_SelectedValueChanged(object sender, EventArgs e)
@@ -277,21 +298,27 @@ namespace SmallBusinessManagementSystem.UI
             //categoryComboBox.SelectedText = null;
 
             //MessageBox.Show(categoryComboBox.SelectedIndex.ToString());
-            if(categoryComboBox.SelectedIndex==-1) return;
+            if (categoryComboBox.SelectedIndex != 0) _isCategorySelected = true;
+            if (categoryComboBox.SelectedIndex==-1) return;
             if(_isCategorySelected)
             {
                 //MessageBox.Show(categoryComboBox.Text);
-                productComboBox.DataSource = _salesManager.GetListForComboBox("Product", categoryComboBox.Text);
+                //productComboBox.DataSource = null;
+                productComboBox.DataSource = _salesManager.GetProductList(((CategoryModel)categoryComboBox.SelectedItem).Code.ToString());
+                productComboBox.ValueMember = "Code";
+                productComboBox.DisplayMember = "Name";
                 productComboBox.SelectedIndex = -1;
                 productComboBox.SelectedText = "-Select-";
 
+                quantityComboBox.DataSource = null;
                 quantityComboBox.SelectedIndex = -1;
                 availableQuantityTextBox.Text = null;
                 FillTotalMrp();
                 mrpTextBox.Text = null;
+                _isProductSelected = false;
             }
 
-            _isCategorySelected = true;
+            //_isCategorySelected = true;
         }
 
 

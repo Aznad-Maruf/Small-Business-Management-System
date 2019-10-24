@@ -26,6 +26,7 @@ namespace SmallBusinessManagementSystem.Manager
             if (!IsSelected(salesModel.Customer)) return "Select Customer";
             if (!IsSelected(salesModel.Product)) return "Select Product";
             if (salesModel.Quantity == 0) return "Out of stock.";
+            if (salesModel.MRP < 0) return "MRP must be positive";
 
             return "True";
         }
@@ -59,7 +60,7 @@ namespace SmallBusinessManagementSystem.Manager
 
         private string ExtractCode(string str)
         {
-            if (str != "-Select-") str = str.Substring(str.Length - 5, 4);
+            //if (str != "-Select-") str = str.Substring(str.Length - 5, 4);
             return str;
         }
 
@@ -77,7 +78,7 @@ namespace SmallBusinessManagementSystem.Manager
 
         public void AddToCart(ProductDetails productDetails)
         {
-            productDetails.SI = productDetailsList.Count;
+            productDetails.SI = productDetailsList.Count+1;
             productDetails.Edit = "Edit";
             productDetails.Delete = "Delete";
             productDetailsList.Add(productDetails);
@@ -138,6 +139,21 @@ namespace SmallBusinessManagementSystem.Manager
             {
                 if(productDetailsList[a_i].SI.ToString().Equals(si)) productDetailsList.RemoveAt(a_i);
             }
+        }
+
+        public List<CustomerModel> GetCustomerList()
+        {
+            return _salesRepository.GetCustomrList();
+        }
+
+        public List<CategoryModel> GetCategoryList()
+        {
+            return _salesRepository.GetCategoryList();
+        }
+
+        public List<ProductModel> GetProductList(string category)
+        {
+            return _salesRepository.GetProductList(category);
         }
     }
 }

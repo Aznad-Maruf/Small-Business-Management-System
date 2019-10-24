@@ -35,6 +35,7 @@ INSERT INTO Product (Code, Name, Category, ReorderLevel, Description) VALUES ('1
 INSERT INTO Product (Code, Name, Category, ReorderLevel, Description) VALUES ('1005', 'Apple iMac 21.5" MMQA2', '1001', 150, 'It''s Apple!');
 
 
+
 CREATE TABLE Customer(
 Code VARCHAR(255) PRIMARY KEY,
 Name VARCHAR(255) NOT NULL,
@@ -112,13 +113,13 @@ CREATE TABLE Purchase(
 	CONSTRAINT FK_ProductP FOREIGN KEY(Product) REFERENCES Product(Code)
 )
 
-INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('2929cc', '2018-07-23', '1002', '1001', '1005', '2009-02-11', '250', '70000', '90000', 'Sell kom lav besi.');
+INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, ExpireDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('2929ccd', '2018-07-23', '1002', '1001', '1005', '2009-02-11', '02-12-2020', '250', '70000', '90000', 'Sell kom lav besi.');
 INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, ExpireDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('29287pc', '2018-07-23', '1003', '1000', '1000', '2007-01-01', '2017-12-30','500', '7000', '9500', 'Sell besi lav kom.');
 INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('77729cc', '2018-07-29', '1003', '1000', '1003', '2019-08-01', '550', '2000', '5000', 'Sell besi lav besi.');
 INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('292589cy', '2018-07-23', '1004', '1003', '1004', '2005-07-21', '750', '500', '1000', 'Sell besi lav mondo na.');
 INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('aa29cc', '2019-01-03', '1001', '1000', '1002', '2010-02-01', '1050', '25000', '45000', 'Sell kom lav valoi.');
 INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('888829cc', '2018-07-23', '1002', '1001', '1005', '2009-02-11', '250', '70000', '90000', 'Sell kom lav besi.');
-INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('u9l29cc', '2018-07-23', '1002', '1000', '1003', '2009-02-11', '1', '70000', '90000', 'Sell kom lav besi.');
+INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, Quantity, UnitPrice, MRP, Remarks) VALUES ('u88l29cc', '2018-07-23', '1002', '1000', '1000', '2009-02-11', '1', '700', '500.33', 'Sell kom lav besi.');
 
 SELECT * FROM Supplier;
 SELECT * FROM Product;
@@ -138,6 +139,7 @@ SELECT Product AS 'Products(Code)', ManufactureDate AS 'Manufactured Date', Expi
 SELECT LoyalityPoint FROM Customer WHERE Code = '1000';
 SELECT MRP FROM Purchase WHERE Category = '1000' AND Product = '1000';
 UPDATE Customer SET LoyalityPoint = '22' Where Code = '1000';
+SELECT InvoiceNo FROM Purchase;
 --Sales--
 
 
@@ -146,6 +148,10 @@ SELECT Name + '(' + Code + ')' AS Category FROM Category
 SELECT Name + '(' + Code + ')' AS Produt FROM Product WHERE Category = '1000'
 
 SELECT Quantity FROM Available WHERE Category = '1000' AND Product = '1000';
+
+SELECT UnitPrice, MRP FROM Purchase WHERE
+PurchaseCode IN
+(SELECT MAX(PurchaseCode) FROM Purchase WHERE Category = '1000' AND Product = '1000');
 
 
 /*
@@ -202,8 +208,10 @@ SELECT Product, PQ FROM
 		ON Pro.PC=Sal.SC AND Pro.PP=Sal.SP;
 
 /*
+SELECT * FROM Category;
 SELECT * FROM Customer;
-SELECT * FROM Sales;
+SELECT Code, Name FROM Supplier;
+SELECT * FROM Sales ORDER BY Date;
 SELECT * FROM Purchase;
 SELECT * FROM AvailableTemp;
 SELECT * FROM Available;
@@ -211,6 +219,7 @@ SELECT * FROM Available ORDER BY Category;
 */
 
 /*
+DROP TABLE Category;
 DROP TABLE Sales;
 DROP TABLE Purchase;
 DROP TABLE Product;

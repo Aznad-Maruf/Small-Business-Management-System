@@ -109,5 +109,68 @@ namespace SmallBusinessManagementSystem.Repository
             _commandString = $"UPDATE Customer SET LoyalityPoint = '{loyaltyPoint}' Where Code = '{customer}';";
             ExecuteNonQuery();
         }
+
+
+        public List<CustomerModel> GetCustomrList()
+        {
+            List<CustomerModel> list = new List<CustomerModel>();
+            string tableName = "Customer";
+            _commandString = $"SELECT Code, Name FROM {tableName}";
+            ExecuteQuery();
+
+            while (_sqlDataReader.Read())
+            {
+                CustomerModel customerModel = new CustomerModel();
+                customerModel.Code = _sqlDataReader["Code"].ToString();
+                customerModel.Name = _sqlDataReader["Name"].ToString();
+                list.Add(customerModel);
+            }
+
+            CloseConnection();
+
+            return list.Count > 0 ? list : null;
+        }
+
+        public List<CategoryModel> GetCategoryList()
+        {
+            List<CategoryModel> list = new List<CategoryModel>();
+            string tableName = "Category";
+            _commandString = $"SELECT Code, Name FROM {tableName}";
+            ExecuteQuery();
+
+            while (_sqlDataReader.Read())
+            {
+                CategoryModel categoryModel = new CategoryModel();
+                categoryModel.Code = _sqlDataReader["Code"].ToString();
+                categoryModel.Name = _sqlDataReader["Name"].ToString();
+                list.Add(categoryModel);
+            }
+
+            CloseConnection();
+
+            return list.Count > 0 ? list : null;
+        }
+
+        public List<ProductModel> GetProductList(string category)
+        {
+            List<ProductModel> list = new List<ProductModel>();
+            string tableName = "Product";
+            _commandString = $"SELECT Code, Name FROM {tableName} WHERE Category = {category}";
+
+            ExecuteQuery();
+
+            while (_sqlDataReader.Read())
+            {
+                ProductModel productModel = new ProductModel();
+                productModel.Code = _sqlDataReader["Code"].ToString();
+                productModel.Name = _sqlDataReader["Name"].ToString();
+                list.Add(productModel);
+            }
+
+            CloseConnection();
+
+            return list.Count > 0 ? list : null;
+        }
+
     }
 }

@@ -19,7 +19,7 @@ namespace SmallBusinessManagementSystem.Repository
         {
             List<string> list = new List<string>();
 
-            _commandString = $"SELECT Name + '(' + Code + ')' AS {tableName} FROM {tableName}";
+            _commandString = $"SELECT Code, Name FROM {tableName}";
             if (tableName.Equals("Product") && category != "-Select")
             {
                 list.Clear();
@@ -34,7 +34,7 @@ namespace SmallBusinessManagementSystem.Repository
 
             CloseConnection();
 
-            return list;
+            return list.Count > 0 ? list : null;
         }
 
         internal double GetAvailableQuantity(string category, string product)
@@ -93,7 +93,82 @@ namespace SmallBusinessManagementSystem.Repository
             ExecuteNonQuery();
         }
 
+        public void FillUpPurchaseInfo(PurchaseModel purchaseModel)
+        {
+            purchaseModel.AvailableQuantity = GetAvailableQuantity(purchaseModel.Category, purchaseModel.Product).ToString();
+
+            _commandString = $"SELECT UnitPrice, MRP FROM Purchase WHERE PurchaseCode IN (SELECT MAX(PurchaseCode) FROM Purchase WHERE Category = '{purchaseModel.Category}' AND Product = '{purchaseModel.Product}'); ";
+            ExecuteQuery();
+            while (_sqlDataReader.Read())
+            {
+                purchaseModel.PreviousUnitPrice = _sqlDataReader["UnitPrice"].ToString();
+                purchaseModel.PreviousMRP = _sqlDataReader["MRP"].ToString();
+            }
+        }
+
+        public List<SupplierModel> GetSupplierList()
+        {
+            List<SupplierModel> list = new List<SupplierModel>();
+            string tableName = "Supplier";
+            _commandString = $"SELECT Code, Name FROM {tableName}";
+            ExecuteQuery();
+
+            while (_sqlDataReader.Read())
+            {
+                SupplierModel supplierModel = new SupplierModel();
+                supplierModel.Code = _sqlDataReader["Code"].ToString();
+                supplierModel.Name = _sqlDataReader["Name"].ToString();
+                list.Add(supplierModel);
+            }
+
+            CloseConnection();
+
+            return list.Count > 0 ? list : null;
+        }
+
+        public List<CategoryModel> GetCategoryList()
+        {
+            List<CategoryModel> list = new List<CategoryModel>();
+            string tableName = "Category";
+            _commandString = $"SELECT Code, Name FROM {tableName}";
+            ExecuteQuery();
+
+            while (_sqlDataReader.Read())
+            {
+                CategoryModel categoryModel = new CategoryModel();
+                categoryModel.Code = _sqlDataReader["Code"].ToString();
+                categoryModel.Name = _sqlDataReader["Name"].ToString();
+                list.Add(categoryModel);
+            }
+
+            CloseConnection();
+
+            return list.Count > 0 ? list : null;
+        }
+
+        public List<ProductModel> GetProductList(string category)
+        {
+            List<ProductModel> list = new List<ProductModel>();
+            string tableName = "Product";
+            _commandString = $"SELECT Code, Name FROM {tableName} WHERE Category = {category}";
+
+            ExecuteQuery();
+
+            while (_sqlDataReader.Read())
+            {
+                ProductModel productModel = new ProductModel();
+                productModel.Code = _sqlDataReader["Code"].ToString();
+                productModel.Name = _sqlDataReader["Name"].ToString();
+                list.Add(productModel);
+            }
+
+            CloseConnection();
+
+            return list.Count > 0 ? list : null;
+        }
+
         /*---- Data Methods --------*/
+
         private void ExecuteQuery()
         {
             _sqlDataReader = _connectionRepository.ExecuteQueryAndGetSqlDataReader(_commandString);
@@ -110,5 +185,25 @@ namespace SmallBusinessManagementSystem.Repository
             _connectionRepository.CloseConnection();
         }
 
+        public bool IsUniqueInvoiceNo(string invoiceNo)
+        {
+            bool isUnique = true;
+            _commandString = $"SELECT InvoiceNo FROM Purchase;";
+            ExecuteQuery();
+            while (_sqlDataReader.Read())
+            {
+                if (_sqlDataReader["InvoiceNo"].ToString().Equals(invoiceNo)) isUnique = false;
+            }
+            CloseConnection();
+
+            return isUnique;
+        }
+
+        public void AddToPurchase(PurchaseModel purchaseModel)
+        {
+            _commandString =
+                $"INSERT INTO Purchase(InvoiceNo, Date, Supplier, Category, Product, ManufactureDate, ExpireDate, Quantity, UnitPrice, MRP, Remarks) VALUES('{purchaseModel.InvoiceNo}', '{purchaseModel.Date}', '{purchaseModel.Supplier}', '{purchaseModel.Category}', '{purchaseModel.Product}', '{purchaseModel.ManufactureDate}', '{purchaseModel.ExpireDate}', '{purchaseModel.Quantity}', '{purchaseModel.UnitPrice}', '{purchaseModel.MRP}', '{purchaseModel.Remarks}');";
+            ExecuteNonQuery();
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace SmallBusinessManagementSystem.Model
         public string Category { get; set; }
         public string Product { get; set; }
         public double Quantity { get; set; }
+        public double MRP { get; set; }
     }
 }

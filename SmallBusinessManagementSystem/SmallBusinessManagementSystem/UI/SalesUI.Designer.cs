@@ -61,9 +61,7 @@
             this.dateLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.customerComboBox = new System.Windows.Forms.ComboBox();
-            this.productDetailsBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.productDetailsBindingSource2 = new System.Windows.Forms.BindingSource(this.components);
-            this.productDetailsBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.gotoPurchaseLinkLabel = new System.Windows.Forms.LinkLabel();
             this.sIDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.productDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,6 +70,9 @@
             this.totalMrpDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.editDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             this.deleteDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.productDetailsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.productDetailsBindingSource2 = new System.Windows.Forms.BindingSource(this.components);
+            this.productDetailsBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.salesDataGridView)).BeginInit();
             this.productGroupBox.SuspendLayout();
@@ -253,7 +254,6 @@
             // 
             this.mrpTextBox.Location = new System.Drawing.Point(203, 190);
             this.mrpTextBox.Name = "mrpTextBox";
-            this.mrpTextBox.ReadOnly = true;
             this.mrpTextBox.Size = new System.Drawing.Size(245, 29);
             this.mrpTextBox.TabIndex = 1;
             // 
@@ -413,17 +413,17 @@
             this.customerComboBox.TabIndex = 0;
             this.customerComboBox.SelectedValueChanged += new System.EventHandler(this.CustomerComboBox_SelectedValueChanged);
             // 
-            // productDetailsBindingSource
+            // gotoPurchaseLinkLabel
             // 
-            this.productDetailsBindingSource.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
-            // 
-            // productDetailsBindingSource2
-            // 
-            this.productDetailsBindingSource2.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
-            // 
-            // productDetailsBindingSource1
-            // 
-            this.productDetailsBindingSource1.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
+            this.gotoPurchaseLinkLabel.AutoSize = true;
+            this.gotoPurchaseLinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gotoPurchaseLinkLabel.Location = new System.Drawing.Point(30, 31);
+            this.gotoPurchaseLinkLabel.Name = "gotoPurchaseLinkLabel";
+            this.gotoPurchaseLinkLabel.Size = new System.Drawing.Size(148, 24);
+            this.gotoPurchaseLinkLabel.TabIndex = 7;
+            this.gotoPurchaseLinkLabel.TabStop = true;
+            this.gotoPurchaseLinkLabel.Text = "Go To Purchase";
+            this.gotoPurchaseLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.gotoPurchaseLinkLabel_LinkClicked);
             // 
             // sIDataGridViewTextBoxColumn
             // 
@@ -484,11 +484,24 @@
             this.deleteDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.deleteDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
+            // productDetailsBindingSource
+            // 
+            this.productDetailsBindingSource.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
+            // 
+            // productDetailsBindingSource2
+            // 
+            this.productDetailsBindingSource2.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
+            // 
+            // productDetailsBindingSource1
+            // 
+            this.productDetailsBindingSource1.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
+            // 
             // SalesUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1413, 600);
+            this.Controls.Add(this.gotoPurchaseLinkLabel);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.productGroupBox);
             this.Controls.Add(this.customerGroupBox);
@@ -506,6 +519,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -554,5 +568,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn totalMrpDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn editDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn deleteDataGridViewTextBoxColumn;
+        private System.Windows.Forms.LinkLabel gotoPurchaseLinkLabel;
     }
 }
