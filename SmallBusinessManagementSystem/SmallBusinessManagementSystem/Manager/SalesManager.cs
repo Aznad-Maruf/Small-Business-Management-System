@@ -25,8 +25,27 @@ namespace SmallBusinessManagementSystem.Manager
             if (!IsSelected(salesModel.Category)) return "Select Category";
             if (!IsSelected(salesModel.Customer)) return "Select Customer";
             if (!IsSelected(salesModel.Product)) return "Select Product";
-            if (salesModel.Quantity == 0) return "Out of stock.";
-            if (salesModel.MRP < 0) return "MRP must be positive";
+            try
+            {
+                if (Convert.ToDouble(salesModel.Quantity) < 0) return "Quantity Must be Positive.";
+                
+            }
+            catch (Exception e)
+            {
+                return "Enter Valid Quantity";
+            }
+
+            try
+            {
+                if ( Convert.ToDouble(salesModel.MRP) < 0) return "MRP must be positive";
+            }
+            catch (Exception e)
+            {
+                return "Enter Valid MRP";
+            }
+            double availableQuantity = GetAvailableQuantity(salesModel.Category, salesModel.Product);
+
+            if (salesModel.Quantity > availableQuantity) return "Qunatity Exceeds Available Quantity";
 
             return "True";
         }
@@ -42,7 +61,7 @@ namespace SmallBusinessManagementSystem.Manager
         /*------- Methods ------*/
         private bool IsSelected(string str)
         {
-            return !(str.Equals("-Selceted-") || String.IsNullOrEmpty(str));
+            return !(String.IsNullOrEmpty(str));
         }
 
         internal double GetAvailableQuantity(string category, string product)

@@ -96,7 +96,7 @@ namespace SmallBusinessManagementSystem.UI
                 availableQuantityTextBox.Text = null;
                 mrpTextBox.Text = null;
                 totalMrpTextBox.Text = null;
-                quantityComboBox.SelectedIndex = -1;
+                quantityTextBox.Text = null;
             }
             if(howMuch.Equals("productDetails") || howMuch.Equals("all"))
             {
@@ -108,10 +108,10 @@ namespace SmallBusinessManagementSystem.UI
                 salesDataGridView.DataSource = null;
             }
 
-            if (howMuch.Equals("all"))
+            if (howMuch.Equals("Customer"))
             {
-                customerComboBox.SelectedIndex = -1;
-                loyaltyPointTextBox.Text = null;
+                categoryComboBox.DataSource = null;
+                productComboBox.DataSource = null;
 
             }
         }
@@ -119,14 +119,36 @@ namespace SmallBusinessManagementSystem.UI
         private void GetAllData()
         {
             //SalesModel _salesModel = new SalesModel();
-            _salesModel.Category = ((CategoryModel)categoryComboBox.SelectedItem).Code;
-            _salesModel.Customer = ((CustomerModel)customerComboBox.SelectedItem).Code;
+            try
+            {
+                _salesModel.Category = ((CategoryModel)categoryComboBox.SelectedItem).Code;
+            }
+            catch (Exception e)
+            {
+                _salesModel.Category = null;
+            }
+
+            try
+            {
+                _salesModel.Customer = ((CustomerModel)customerComboBox.SelectedItem).Code;
+            }
+            catch (Exception e)
+            {
+                _salesModel.Customer = null;
+            }
             _salesModel.Date = dateDateTimePicker.Text;
-            _salesModel.Product = ((ProductModel)productComboBox.SelectedItem).Code;
+            try
+            {
+                _salesModel.Product = ((ProductModel)productComboBox.SelectedItem).Code;
+            }
+            catch (Exception e)
+            {
+                _salesModel.Product = null;
+            }
             try
             {
                 _salesModel.MRP = Convert.ToDouble(mrpTextBox.Text);
-                _salesModel.Quantity = Convert.ToDouble(quantityComboBox.Text);
+                _salesModel.Quantity = Convert.ToDouble(quantityTextBox.Text);
             }
             catch (Exception e)
             {
@@ -139,7 +161,7 @@ namespace SmallBusinessManagementSystem.UI
             ProductDetails productDetails = new ProductDetails();
             productDetails.Category = categoryComboBox.Text;
             productDetails.Product = productComboBox.Text;
-            productDetails.Quantity = Convert.ToDouble(quantityComboBox.Text);
+            productDetails.Quantity = Convert.ToDouble(quantityTextBox.Text);
             productDetails.MRP = Convert.ToDouble(mrpTextBox.Text);
             productDetails.TotalMrp = Convert.ToDouble(totalMrpTextBox.Text);
             SalesModel salesModel = new SalesModel();
@@ -150,7 +172,7 @@ namespace SmallBusinessManagementSystem.UI
             salesModel.Product = _salesModel.Product;
             try
             {
-                salesModel.Quantity = Convert.ToDouble(quantityComboBox.Text);
+                salesModel.Quantity = Convert.ToDouble(quantityTextBox.Text);
             }
             catch (Exception e)
             {
@@ -161,16 +183,16 @@ namespace SmallBusinessManagementSystem.UI
             return productDetails;
         }
 
-        private void FillTotalMrp()
-        {
-            if (String.IsNullOrEmpty(quantityComboBox.Text) || String.IsNullOrEmpty(mrpTextBox.Text))
-                totalMrpTextBox.Text = null;
-            else
-            {
-                totalMrpTextBox.Text =
-                    Convert.ToDouble(Convert.ToDouble(quantityComboBox.Text) * Convert.ToDouble(mrpTextBox.Text)).ToString();
-            }
-        }
+        //private void filltotalmrp()
+        //{
+        //    if (string.isnullorempty(quantitycombobox.text) || string.isnullorempty(mrptextbox.text))
+        //        totalmrptextbox.text = null;
+        //    else
+        //    {
+        //        totalmrptextbox.text =
+        //            convert.todouble(convert.todouble(quantitycombobox.text) * convert.todouble(mrptextbox.text)).tostring();
+        //    }
+        //}
 
         private void FillTheComboBoxes()
         {
@@ -197,23 +219,20 @@ namespace SmallBusinessManagementSystem.UI
             {
                 //MessageBox.Show("Inside");
                 _salesModel.Category = ((CategoryModel)categoryComboBox.SelectedItem).Code;
-                _salesModel.Customer = ((CustomerModel)customerComboBox.SelectedItem).Code;
                 _salesModel.Product = ((ProductModel)productComboBox.SelectedItem).Code;
 
                 double availableQuantity = _salesManager.GetAvailableQuantity(_salesModel.Category, _salesModel.Product);
 
+                availableQuantityTextBox.Text = availableQuantity.ToString();
+
 
                 List<int> list = new List<int>();
                 for (int a_i = 1; a_i <= availableQuantity; a_i++) list.Add(a_i);
-                quantityComboBox.DataSource = list;
+                if (availableQuantity > 0) quantityTextBox.Text = 1.ToString();
+                else quantityTextBox.Text = null;
                 availableQuantityTextBox.Text = availableQuantity.ToString();
                 mrpTextBox.Text = _salesManager.GetMrp(_salesModel.Category, _salesModel.Product);
-                FillTotalMrp();
-                if (availableQuantity == 0)
-                {
-                    //MessageBox.Show("In");
-                    mrpTextBox.Text = null;
-                }
+                
 
                 _isQuantitySelected = false;
             }
@@ -237,6 +256,9 @@ namespace SmallBusinessManagementSystem.UI
             }
             if (column.Equals("Edit"))
             {
+                customerComboBox.SelectedValue = _salesModel.Customer;
+                categoryComboBox.SelectedValue = _salesModel.Category;
+                productComboBox.SelectedValue = _salesModel.Product;
 
                 _salesManager.DeleteFromCart(si);
             }
@@ -268,14 +290,60 @@ namespace SmallBusinessManagementSystem.UI
             //this.Close();
         }
 
+        private void mrpTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(mrpTextBox.Text))
+            {
+                totalMrpTextBox.Text = null;
+                return;
+            }
+            try
+            {
+                _salesModel.MRP = Convert.ToDouble(mrpTextBox.Text);
+                if (!String.IsNullOrEmpty(quantityTextBox.Text))
+                {
+                    totalMrpTextBox.Text = (_salesModel.Quantity * _salesModel.MRP).ToString();
+                }
+            }
+            catch (Exception ee)
+            {
+                mrpTextBox.Text = null;
+                totalMrpTextBox.Text = null;
+                MessageBox.Show("Must enter a valid MRP");
+            }
+        }
+
+        private void quantityTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(quantityTextBox.Text))
+            {
+                totalMrpTextBox.Text = null;
+                return;
+            }
+            try
+            {
+                _salesModel.Quantity = Convert.ToDouble(quantityTextBox.Text);
+                if (!String.IsNullOrEmpty(mrpTextBox.Text))
+                {
+                    totalMrpTextBox.Text = (_salesModel.Quantity * _salesModel.MRP).ToString();
+                }
+            }
+            catch (Exception ee)
+            {
+                quantityTextBox.Text = null;
+                totalMrpTextBox.Text = null;
+                MessageBox.Show("Must enter a valid Quantity");
+            }
+        }
+
         private void quantityComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (quantityComboBox.SelectedIndex != 0) _isQuantitySelected = true;
-            if (quantityComboBox.SelectedIndex == -1) return;
-            if (_isQuantitySelected)
-            {
-                FillTotalMrp();
-            }
+            //if (quantityComboBox.SelectedIndex != 0) _isQuantitySelected = true;
+            //if (quantityComboBox.SelectedIndex == -1) return;
+            //if (_isQuantitySelected)
+            //{
+            //    FillTotalMrp();
+            //}
 
             //_isQuantitySelected = true;
         }
@@ -287,6 +355,17 @@ namespace SmallBusinessManagementSystem.UI
             if (_isCustomerSelected)
             {
                 loyaltyPointTextBox.Text = _salesManager.GetLoyaltyPoint(((CustomerModel)customerComboBox.SelectedItem).Code);
+                categoryComboBox.SelectedIndex = -1;
+                productComboBox.SelectedIndex = -1;
+                availableQuantityTextBox.Text = null;
+                quantityTextBox.Text = null;
+                mrpTextBox.Text = null;
+                salesDataGridView.DataSource = null;
+                grandTotalTextBox.Text = null;
+                discountAmountTextBox.Text = null;
+                discountAmountTextBox.Text = null;
+                payableAmountTextBox.Text = null;
+
             }
 
             //_isCustomerSelected = true;
@@ -308,14 +387,13 @@ namespace SmallBusinessManagementSystem.UI
                 productComboBox.ValueMember = "Code";
                 productComboBox.DisplayMember = "Name";
                 productComboBox.SelectedIndex = -1;
-                productComboBox.SelectedText = "-Select-";
+                //productComboBox.SelectedText = "-Select-";
 
-                quantityComboBox.DataSource = null;
-                quantityComboBox.SelectedIndex = -1;
+                quantityTextBox.Text = null;
                 availableQuantityTextBox.Text = null;
-                FillTotalMrp();
+                
                 mrpTextBox.Text = null;
-                _isProductSelected = false;
+                //_isProductSelected = false;
             }
 
             //_isCategorySelected = true;

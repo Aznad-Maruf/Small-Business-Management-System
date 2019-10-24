@@ -31,6 +31,15 @@
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.salesDataGridView = new System.Windows.Forms.DataGridView();
+            this.sIDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.productDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.categoryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mRPDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalMrpDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.editDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.deleteDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.productDetailsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.submitButton = new System.Windows.Forms.Button();
             this.payableAmountTextBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -51,7 +60,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.quantityComboBox = new System.Windows.Forms.ComboBox();
             this.productComboBox = new System.Windows.Forms.ComboBox();
             this.categoryComboBox = new System.Windows.Forms.ComboBox();
             this.customerGroupBox = new System.Windows.Forms.GroupBox();
@@ -62,22 +70,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.customerComboBox = new System.Windows.Forms.ComboBox();
             this.gotoPurchaseLinkLabel = new System.Windows.Forms.LinkLabel();
-            this.sIDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.productDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.categoryDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mRPDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.totalMrpDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.editDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.deleteDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.productDetailsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.productDetailsBindingSource2 = new System.Windows.Forms.BindingSource(this.components);
             this.productDetailsBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.quantityTextBox = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.salesDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource)).BeginInit();
             this.productGroupBox.SuspendLayout();
             this.customerGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource1)).BeginInit();
             this.SuspendLayout();
@@ -121,6 +121,69 @@
             this.salesDataGridView.Size = new System.Drawing.Size(844, 210);
             this.salesDataGridView.TabIndex = 11;
             this.salesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.salesDataGridView_CellContentClick);
+            // 
+            // sIDataGridViewTextBoxColumn
+            // 
+            this.sIDataGridViewTextBoxColumn.DataPropertyName = "SI";
+            this.sIDataGridViewTextBoxColumn.HeaderText = "SI";
+            this.sIDataGridViewTextBoxColumn.Name = "sIDataGridViewTextBoxColumn";
+            this.sIDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // productDataGridViewTextBoxColumn
+            // 
+            this.productDataGridViewTextBoxColumn.DataPropertyName = "Product";
+            this.productDataGridViewTextBoxColumn.HeaderText = "Product";
+            this.productDataGridViewTextBoxColumn.Name = "productDataGridViewTextBoxColumn";
+            this.productDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // quantityDataGridViewTextBoxColumn
+            // 
+            this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
+            this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
+            this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
+            this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // categoryDataGridViewTextBoxColumn
+            // 
+            this.categoryDataGridViewTextBoxColumn.DataPropertyName = "Category";
+            this.categoryDataGridViewTextBoxColumn.HeaderText = "Category";
+            this.categoryDataGridViewTextBoxColumn.Name = "categoryDataGridViewTextBoxColumn";
+            this.categoryDataGridViewTextBoxColumn.ReadOnly = true;
+            this.categoryDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // mRPDataGridViewTextBoxColumn
+            // 
+            this.mRPDataGridViewTextBoxColumn.DataPropertyName = "MRP";
+            this.mRPDataGridViewTextBoxColumn.HeaderText = "MRP (Tk)";
+            this.mRPDataGridViewTextBoxColumn.Name = "mRPDataGridViewTextBoxColumn";
+            this.mRPDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // totalMrpDataGridViewTextBoxColumn
+            // 
+            this.totalMrpDataGridViewTextBoxColumn.DataPropertyName = "TotalMrp";
+            this.totalMrpDataGridViewTextBoxColumn.HeaderText = "Total MRP (Tk)";
+            this.totalMrpDataGridViewTextBoxColumn.Name = "totalMrpDataGridViewTextBoxColumn";
+            this.totalMrpDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // editDataGridViewTextBoxColumn
+            // 
+            this.editDataGridViewTextBoxColumn.DataPropertyName = "Edit";
+            this.editDataGridViewTextBoxColumn.HeaderText = "Edit";
+            this.editDataGridViewTextBoxColumn.Name = "editDataGridViewTextBoxColumn";
+            this.editDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.editDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // deleteDataGridViewTextBoxColumn
+            // 
+            this.deleteDataGridViewTextBoxColumn.DataPropertyName = "Delete";
+            this.deleteDataGridViewTextBoxColumn.HeaderText = "Delete";
+            this.deleteDataGridViewTextBoxColumn.Name = "deleteDataGridViewTextBoxColumn";
+            this.deleteDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.deleteDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // productDetailsBindingSource
+            // 
+            this.productDetailsBindingSource.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
             // 
             // submitButton
             // 
@@ -205,6 +268,7 @@
             this.productGroupBox.Controls.Add(this.addButton);
             this.productGroupBox.Controls.Add(this.totalMrpTextBox);
             this.productGroupBox.Controls.Add(this.label9);
+            this.productGroupBox.Controls.Add(this.quantityTextBox);
             this.productGroupBox.Controls.Add(this.mrpTextBox);
             this.productGroupBox.Controls.Add(this.label8);
             this.productGroupBox.Controls.Add(this.label7);
@@ -212,7 +276,6 @@
             this.productGroupBox.Controls.Add(this.label4);
             this.productGroupBox.Controls.Add(this.label5);
             this.productGroupBox.Controls.Add(this.label6);
-            this.productGroupBox.Controls.Add(this.quantityComboBox);
             this.productGroupBox.Controls.Add(this.productComboBox);
             this.productGroupBox.Controls.Add(this.categoryComboBox);
             this.productGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -256,6 +319,7 @@
             this.mrpTextBox.Name = "mrpTextBox";
             this.mrpTextBox.Size = new System.Drawing.Size(245, 29);
             this.mrpTextBox.TabIndex = 1;
+            this.mrpTextBox.TextChanged += new System.EventHandler(this.mrpTextBox_TextChanged);
             // 
             // label8
             // 
@@ -309,17 +373,6 @@
             this.label6.Size = new System.Drawing.Size(85, 24);
             this.label6.TabIndex = 1;
             this.label6.Text = "Category";
-            // 
-            // quantityComboBox
-            // 
-            this.quantityComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.quantityComboBox.FormattingEnabled = true;
-            this.quantityComboBox.Location = new System.Drawing.Point(203, 152);
-            this.quantityComboBox.MaxDropDownItems = 10;
-            this.quantityComboBox.Name = "quantityComboBox";
-            this.quantityComboBox.Size = new System.Drawing.Size(245, 32);
-            this.quantityComboBox.TabIndex = 0;
-            this.quantityComboBox.SelectedValueChanged += new System.EventHandler(this.quantityComboBox_SelectedValueChanged);
             // 
             // productComboBox
             // 
@@ -425,69 +478,6 @@
             this.gotoPurchaseLinkLabel.Text = "Go To Purchase";
             this.gotoPurchaseLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.gotoPurchaseLinkLabel_LinkClicked);
             // 
-            // sIDataGridViewTextBoxColumn
-            // 
-            this.sIDataGridViewTextBoxColumn.DataPropertyName = "SI";
-            this.sIDataGridViewTextBoxColumn.HeaderText = "SI";
-            this.sIDataGridViewTextBoxColumn.Name = "sIDataGridViewTextBoxColumn";
-            this.sIDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // productDataGridViewTextBoxColumn
-            // 
-            this.productDataGridViewTextBoxColumn.DataPropertyName = "Product";
-            this.productDataGridViewTextBoxColumn.HeaderText = "Product";
-            this.productDataGridViewTextBoxColumn.Name = "productDataGridViewTextBoxColumn";
-            this.productDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // quantityDataGridViewTextBoxColumn
-            // 
-            this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
-            this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
-            this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
-            this.quantityDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // categoryDataGridViewTextBoxColumn
-            // 
-            this.categoryDataGridViewTextBoxColumn.DataPropertyName = "Category";
-            this.categoryDataGridViewTextBoxColumn.HeaderText = "Category";
-            this.categoryDataGridViewTextBoxColumn.Name = "categoryDataGridViewTextBoxColumn";
-            this.categoryDataGridViewTextBoxColumn.ReadOnly = true;
-            this.categoryDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // mRPDataGridViewTextBoxColumn
-            // 
-            this.mRPDataGridViewTextBoxColumn.DataPropertyName = "MRP";
-            this.mRPDataGridViewTextBoxColumn.HeaderText = "MRP (Tk)";
-            this.mRPDataGridViewTextBoxColumn.Name = "mRPDataGridViewTextBoxColumn";
-            this.mRPDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // totalMrpDataGridViewTextBoxColumn
-            // 
-            this.totalMrpDataGridViewTextBoxColumn.DataPropertyName = "TotalMrp";
-            this.totalMrpDataGridViewTextBoxColumn.HeaderText = "Total MRP (Tk)";
-            this.totalMrpDataGridViewTextBoxColumn.Name = "totalMrpDataGridViewTextBoxColumn";
-            this.totalMrpDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // editDataGridViewTextBoxColumn
-            // 
-            this.editDataGridViewTextBoxColumn.DataPropertyName = "Edit";
-            this.editDataGridViewTextBoxColumn.HeaderText = "Edit";
-            this.editDataGridViewTextBoxColumn.Name = "editDataGridViewTextBoxColumn";
-            this.editDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.editDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // deleteDataGridViewTextBoxColumn
-            // 
-            this.deleteDataGridViewTextBoxColumn.DataPropertyName = "Delete";
-            this.deleteDataGridViewTextBoxColumn.HeaderText = "Delete";
-            this.deleteDataGridViewTextBoxColumn.Name = "deleteDataGridViewTextBoxColumn";
-            this.deleteDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.deleteDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // productDetailsBindingSource
-            // 
-            this.productDetailsBindingSource.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
-            // 
             // productDetailsBindingSource2
             // 
             this.productDetailsBindingSource2.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
@@ -495,6 +485,14 @@
             // productDetailsBindingSource1
             // 
             this.productDetailsBindingSource1.DataSource = typeof(SmallBusinessManagementSystem.Model.ProductDetails);
+            // 
+            // quantityTextBox
+            // 
+            this.quantityTextBox.Location = new System.Drawing.Point(203, 155);
+            this.quantityTextBox.Name = "quantityTextBox";
+            this.quantityTextBox.Size = new System.Drawing.Size(245, 29);
+            this.quantityTextBox.TabIndex = 1;
+            this.quantityTextBox.TextChanged += new System.EventHandler(this.quantityTextBox_TextChanged);
             // 
             // SalesUI
             // 
@@ -511,11 +509,11 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.salesDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource)).EndInit();
             this.productGroupBox.ResumeLayout(false);
             this.productGroupBox.PerformLayout();
             this.customerGroupBox.ResumeLayout(false);
             this.customerGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.productDetailsBindingSource1)).EndInit();
             this.ResumeLayout(false);
@@ -556,7 +554,6 @@
         private System.Windows.Forms.Label dateLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox customerComboBox;
-        private System.Windows.Forms.ComboBox quantityComboBox;
         private System.Windows.Forms.BindingSource productDetailsBindingSource;
         private System.Windows.Forms.BindingSource productDetailsBindingSource1;
         private System.Windows.Forms.BindingSource productDetailsBindingSource2;
@@ -569,5 +566,6 @@
         private System.Windows.Forms.DataGridViewButtonColumn editDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn deleteDataGridViewTextBoxColumn;
         private System.Windows.Forms.LinkLabel gotoPurchaseLinkLabel;
+        private System.Windows.Forms.TextBox quantityTextBox;
     }
 }

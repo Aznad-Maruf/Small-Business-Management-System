@@ -54,7 +54,7 @@ namespace SmallBusinessManagementSystem.Repository
 
         public void AddToSales(SalesModel salesModel)
         {
-            _commandString = $"INSERT INTO Sales(Date, Customer, Category, Product, Quantity) VALUES ('{salesModel.Date}', '{salesModel.Customer}', '{salesModel.Category}', '{salesModel.Product}', '{salesModel.Quantity}');";
+            _commandString = $"INSERT INTO Sales(Date, Customer, Category, Product, Quantity, MRP) VALUES ('{salesModel.Date}', '{salesModel.Customer}', '{salesModel.Category}', '{salesModel.Product}', '{salesModel.Quantity}', '{salesModel.MRP}');";
             ExecuteNonQuery();
         }
 
