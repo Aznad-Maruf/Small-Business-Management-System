@@ -17,8 +17,8 @@ namespace SmallBusinessManagementSystem
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new SalesUI());
-           // Application.Run(new PurchaseUI());
+            Application.Run(new SalesUI());
+            Application.Run(new PurchaseUI());
             Application.Run(new SupplierEntryUI());
         }
     }
