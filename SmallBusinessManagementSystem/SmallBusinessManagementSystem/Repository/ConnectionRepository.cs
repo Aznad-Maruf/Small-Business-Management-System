@@ -19,7 +19,7 @@ namespace SmallBusinessManagementSystem.Repository
 
             try
             {
-                string _connectionString = @"Server=ROBINHOOD\MARUFROBINSQL; Database=Project1DB; Integrated Security = True";
+                string _connectionString = @"Server=FATEMA; Database=Project1DB; Integrated Security = True";
                 _sqlConnection = new SqlConnection(_connectionString);
                 _sqlCommand = new SqlCommand(commandString,_sqlConnection);
             }
